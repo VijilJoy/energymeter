@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Upload</title>
+  </head>
+  <body>
+    <h1>Upload a File</h1>
+    <form id="myForm">
+      <input type="text" placeholder="URL" name="url" required />
+      <input type="text" placeholder="Name" name="name" required />
+      <input type="text" placeholder="Version" name="version" required />
+      <button type="submit">Upload</button>
+    </form>
+
+    <script>
+      document
+        .getElementById("myForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the form from submitting normally
+
+          const formData = new FormData(event.target);
+          const data = {
+            url: formData.get("url").trim(),
+            name: formData.get("name"),
+            version: formData.get("version"),
+          };
+
+          const res = fetch("/data", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data), // Send the data as JSON
+          })
+            .then((response) => response.json()) // Handle the response
+            .then((data) => {
+              console.log(data);
+              alert("File uploaded successfully");
+              window.location.reload();
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+    </script>
+  </body>
+</html>
